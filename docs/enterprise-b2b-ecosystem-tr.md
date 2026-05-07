@@ -15,6 +15,7 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 9. **Lojistik:** CreateShipment, GetTrackingStatus, parsiyel sevkiyat ve teslimat kanıtı.
 10. **BI / Observability:** Bayi performansı, stok turnover, satış hunisi, anomaly/fraud sinyalleri, log/metric/trace.
 11. **Dağıtım:** SaaS için Kubernetes; on-prem için Docker Compose + Nginx + backup scriptleri.
+12. **Enterprise Suite:** ACL policy, workflow karar motoru, ödeme planı, kargo, iade, bildirim, arama indeksi ve KPI snapshot.
 
 ## Kritik Dosya Haritası
 
@@ -34,6 +35,12 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 | `deploy/onprem/docker-compose.yml` | On-prem PostgreSQL, Redis, API ve Nginx ayağa kaldırma taslağı. |
 | `deploy/onprem/scripts/backup_postgres.sh` | Günlük/saatlik cron ile çalıştırılabilecek PostgreSQL yedek betiği. |
 | `deploy/saas/k8s/prob2b-api-deployment.yaml` | SaaS Kubernetes deployment/service taslağı. |
+| `deploy/saas/k8s/prob2b-api-hpa.yaml` | Trafik artışında otomatik yatay ölçekleme taslağı. |
+| `deploy/saas/k8s/prob2b-api-ingress.yaml` | TLS ve ingress yönlendirme taslağı. |
+| `openapi/prob2b.openapi.yaml` | Harici ekipler ve entegrasyonlar için API sözleşmesi. |
+| `observability/prometheus/prometheus.yml` | Prometheus scrape yapılandırması. |
+| `observability/grafana/prob2b-overview-dashboard.json` | Grafana dashboard taslağı. |
+| `cli/prob2b.py` | Blueprint, CSV teklif ve fixture export CLI aracı. |
 
 ## API Uçları
 
@@ -45,6 +52,13 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 | Sipariş oluşturma | `POST` | `/b2b/orders` |
 | ERP/EDI paketleri | `GET` | `/b2b/integrations/packets` |
 | Audit trail | `GET` | `/b2b/audit` |
+| Enterprise feature catalog | `GET` | `/b2b/enterprise/features` |
+| Workflow karar motoru | `POST` | `/b2b/enterprise/workflow/decide` |
+| CSV hızlı sipariş parse | `POST` | `/b2b/quick-order/parse` |
+| Kargo oluşturma | `POST` | `/b2b/shipments` |
+| İade oluşturma | `POST` | `/b2b/returns` |
+| Arama indeksi | `GET` | `/b2b/search/index` |
+| KPI snapshot | `GET` | `/b2b/analytics/snapshot` |
 
 ## Örnek Teklif
 

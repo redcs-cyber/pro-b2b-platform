@@ -7,6 +7,8 @@ from fastapi.staticfiles import StaticFiles
 
 from api.telemetry_service import TelemetryStore
 from api.b2b_ecosystem import B2BEcosystemStore, B2BOrderCreate
+from api.enterprise_suite import ApprovalRequest, EnterpriseSuite, ReturnCreate, ShipmentCreate
+from api.quick_order import parse_quick_order_csv
 from api.automotive import (
     AutomotiveStore,
     OrderCreate,
@@ -20,6 +22,7 @@ app = FastAPI(title="ProB2B Platform")
 store = TelemetryStore()
 automotive_store = AutomotiveStore()
 b2b_store = B2BEcosystemStore()
+enterprise_suite = EnterpriseSuite(b2b_store)
 STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
@@ -85,6 +88,42 @@ def b2b_integration_packets() -> dict:
 @app.get("/b2b/audit")
 def b2b_audit() -> list[dict]:
     return [event.__dict__ for event in b2b_store.audit_trail]
+
+
+@app.get("/b2b/enterprise/features")
+def b2b_enterprise_features() -> dict:
+    return enterprise_suite.mega_feature_catalog()
+
+
+@app.post("/b2b/enterprise/workflow/decide")
+def b2b_workflow_decide(request: ApprovalRequest) -> dict:
+    return enterprise_suite.decide_workflow(request)
+
+
+@app.post("/b2b/quick-order/parse")
+def b2b_quick_order_parse(payload: dict) -> dict:
+    parsed = parse_quick_order_csv(payload.get("csv", ""))
+    return {"lines": [line.__dict__ for line in parsed.lines], "errors": parsed.errors}
+
+
+@app.post("/b2b/shipments")
+def b2b_create_shipment(shipment: ShipmentCreate) -> dict:
+    return enterprise_suite.create_shipment(shipment)
+
+
+@app.post("/b2b/returns")
+def b2b_create_return(request: ReturnCreate) -> dict:
+    return enterprise_suite.create_return(request)
+
+
+@app.get("/b2b/search/index")
+def b2b_search_index() -> list[dict]:
+    return enterprise_suite.build_search_index()
+
+
+@app.get("/b2b/analytics/snapshot")
+def b2b_analytics_snapshot() -> dict:
+    return enterprise_suite.analytics_snapshot()
 
 
 @app.get("/automotive/overview")

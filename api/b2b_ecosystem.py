@@ -183,6 +183,7 @@ class B2BEcosystemStore:
                 "WMS/el terminali, stok rezervasyon ve lojistik entegrasyonu",
                 "BI dashboard, raporlama, anomaly/fraud monitoring",
                 "SaaS Kubernetes + on-prem Docker/Nginx dağıtım seçenekleri",
+                "Kargo, iade, bildirim, arama indeksi ve BI KPI katmanı",
             ],
             "data_files": {
                 "order_schema": "schemas/order_schema.json",
@@ -199,6 +200,14 @@ class B2BEcosystemStore:
                 "environment": ".env.example",
                 "dockerfile": "deploy/Dockerfile",
                 "backup_script": "deploy/onprem/scripts/backup_postgres.sh",
+                "openapi": "openapi/prob2b.openapi.yaml",
+                "quick_order_schema": "schemas/quick_order_schema.json",
+                "customer_schema": "schemas/customer_schema.json",
+                "hpa": "deploy/saas/k8s/prob2b-api-hpa.yaml",
+                "ingress": "deploy/saas/k8s/prob2b-api-ingress.yaml",
+                "prometheus": "observability/prometheus/prometheus.yml",
+                "grafana": "observability/grafana/prob2b-overview-dashboard.json",
+                "cli": "cli/prob2b.py",
             },
             "counts": {
                 "customers": len(self.customers),
