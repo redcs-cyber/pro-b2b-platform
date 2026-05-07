@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products source="ERP" target="ProB2B" generated_at="2026-05-07T10:00:00Z">
+  <product>
+    <sku>PROD-X</sku>
+    <name>Ağır hizmet fren diski</name>
+    <brand>ProParts</brand>
+    <category>Fren Sistemi</category>
+    <unit>Adet</unit>
+    <vat_rate>0.20</vat_rate>
+    <attributes>
+      <attribute name="çap">312mm</attribute>
+      <attribute name="malzeme">yüksek karbon</attribute>
+    </attributes>
+  </product>
+</products>

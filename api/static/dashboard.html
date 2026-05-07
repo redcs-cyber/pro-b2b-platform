@@ -17,15 +17,15 @@
     <div>
       <span class="badge">online · otomotiv MVP</span>
       <h1>ProB2B Otomotiv Yedek Parça Ekosistemi</h1>
-      <p>B2B katalog, OEM/araç uyumluluğu, depo stoku, sipariş akışı ve barkodlu el terminali görev kuyruğu tek platformda.</p>
+      <p>ERP, CRM, PIM, finans, lojistik, fiyat motoru, bayi portalı ve el terminali dahil tailor-made B2B ekosistemi tek platformda.</p>
     </div>
-    <span class="badge">API: <code>/automotive/overview</code></span>
+    <span class="badge">API: <code>/b2b/platform/blueprint</code></span>
   </header>
 
   <section class="grid" id="metrics">
-    <div class="card"><h3>Parça kataloğu</h3><div class="metric" data-count="parts">-</div><p>SKU, OEM ve araç uyumluluk kayıtları.</p></div>
-    <div class="card"><h3>Siparişler</h3><div class="metric" data-count="orders">-</div><p>B2B portal, telefon, pazaryeri ve el terminali.</p></div>
-    <div class="card"><h3>Terminal görevleri</h3><div class="metric" data-count="terminal_tasks">-</div><p>Sayım, mal kabul, toplama, transfer, teslimat.</p></div>
+    <div class="card"><h3>Cariler</h3><div class="metric" data-count="customers">-</div><p>Ana bayi, alt bayi, plasiyer ve yetki hiyerarşisi.</p></div>
+    <div class="card"><h3>Ürünler</h3><div class="metric" data-count="products">-</div><p>PIM, teknik özellik, belge ve medya kayıtları.</p></div>
+    <div class="card"><h3>Fiyat Kuralları</h3><div class="metric" data-count="price_rules">-</div><p>Cari net, bayi grubu, hacim ve kampanya motoru.</p></div>
   </section>
 
   <section class="grid" style="margin-top:1rem">
@@ -47,14 +47,14 @@
   </section>
 
   <script>
-    fetch('/automotive/overview')
+    fetch('/b2b/platform/blueprint')
       .then(r=>r.json())
       .then(data=>{
         Object.entries(data.counts).forEach(([key,value])=>{
           const el=document.querySelector(`[data-count="${key}"]`); if(el) el.textContent=value;
         });
-        document.getElementById('modules').innerHTML=data.modules.map(item=>`<li>${item}</li>`).join('');
-        document.getElementById('terminal-copy').textContent=data.handheld_terminal.recommended_device_profile;
+        document.getElementById('modules').innerHTML=data.layers.map(item=>`<li>${item}</li>`).join('');
+        document.getElementById('terminal-copy').textContent='SaaS Kubernetes veya on-prem Docker/Nginx ile; barkodlu el terminali, ERP job kuyruğu ve audit trail birlikte çalışır.';
       })
       .catch(()=>fetch('/health').then(r=>r.json()).then(console.log));
   </script>

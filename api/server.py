@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from api.telemetry_service import TelemetryStore
+from api.b2b_ecosystem import B2BEcosystemStore, B2BOrderCreate
 from api.automotive import (
     AutomotiveStore,
     OrderCreate,
@@ -18,6 +19,7 @@ from api.automotive import (
 app = FastAPI(title="ProB2B Platform")
 store = TelemetryStore()
 automotive_store = AutomotiveStore()
+b2b_store = B2BEcosystemStore()
 STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
@@ -40,6 +42,49 @@ def telemetry(kind: str, payload: dict | None = None) -> dict:
 @app.get("/telemetry")
 def events() -> list[dict]:
     return store.list_events()
+
+
+@app.get("/b2b/platform/blueprint")
+def b2b_platform_blueprint() -> dict:
+    return b2b_store.platform_blueprint()
+
+
+@app.get("/b2b/customers/tree")
+def b2b_customer_tree(root_customer_id: str | None = None) -> list[dict]:
+    return b2b_store.customer_tree(root_customer_id)
+
+
+@app.post("/b2b/quote")
+def b2b_quote(order: B2BOrderCreate) -> dict:
+    try:
+        return b2b_store.calculate_quote(order)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/b2b/orders")
+def b2b_create_order(order: B2BOrderCreate) -> dict:
+    try:
+        return b2b_store.create_order(order, actor_id=order.customer_id, ip_address="api")
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@app.get("/b2b/orders")
+def b2b_orders() -> list[dict]:
+    return list(b2b_store.orders.values())
+
+
+@app.get("/b2b/integrations/packets")
+def b2b_integration_packets() -> dict:
+    return b2b_store.export_integration_packets()
+
+
+@app.get("/b2b/audit")
+def b2b_audit() -> list[dict]:
+    return [event.__dict__ for event in b2b_store.audit_trail]
 
 
 @app.get("/automotive/overview")

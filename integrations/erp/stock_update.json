@@ -1,0 +1,9 @@
+{
+  "generated_at": "2026-05-07T10:00:00Z",
+  "source": "ERP",
+  "stocks": [
+    {"sku": "PROD-X", "warehouse_id": "MERKEZ", "available": 20000, "reserved": 0},
+    {"sku": "PROD-X", "warehouse_id": "ANKARA-SUBE", "available": 4000, "reserved": 0},
+    {"sku": "FLT-YAG-010", "warehouse_id": "MERKEZ", "available": 8500, "reserved": 0}
+  ]
+}
