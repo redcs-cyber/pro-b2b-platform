@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <title>ProB2B Jarvis Dashboard</title>
+  <style>
+    body{font-family:Inter,Arial,sans-serif;background:#07111f;color:#e6f7ff;margin:2rem}
+    .card{border:1px solid #1e8fff;border-radius:12px;padding:1rem;margin-bottom:1rem;background:#0d1d33}
+    code{color:#7cf7ff}
+  </style>
+</head>
+<body>
+  <h1>ProB2B Jarvis Visual Ops</h1>
+  <div class="card">Durum: <code>online</code></div>
+  <div class="card">Telemetri: <code>/telemetry</code></div>
+  <script>fetch('/health').then(r=>r.json()).then(console.log)</script>
+</body>
+</html>

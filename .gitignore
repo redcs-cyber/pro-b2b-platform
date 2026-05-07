@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+dist/
+build/
+*.spec
+*.log
+.env
+jarvis/.env
+jarvis/mcp_servers.json
+.DS_Store
