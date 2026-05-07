@@ -2,17 +2,61 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <title>ProB2B Jarvis Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ProB2B Otomotiv Yedek Parça Ekosistemi</title>
   <style>
-    body{font-family:Inter,Arial,sans-serif;background:#07111f;color:#e6f7ff;margin:2rem}
-    .card{border:1px solid #1e8fff;border-radius:12px;padding:1rem;margin-bottom:1rem;background:#0d1d33}
-    code{color:#7cf7ff}
+    :root{color-scheme:dark;--bg:#07111f;--panel:#0d1d33;--panel2:#102846;--line:#1e8fff;--text:#e6f7ff;--muted:#9fc0d1;--ok:#7cf7ff;--warn:#ffd166}
+    *{box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top left,#123761 0,#07111f 38%,#050b14 100%);color:var(--text);margin:0;padding:2rem}
+    header{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1.5rem}.badge{border:1px solid var(--line);border-radius:999px;padding:.45rem .8rem;background:rgba(30,143,255,.12);color:var(--ok)}
+    h1{margin:.2rem 0;font-size:clamp(1.8rem,4vw,3.5rem)} p{color:var(--muted);line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}.card{border:1px solid rgba(30,143,255,.55);border-radius:16px;padding:1rem;background:linear-gradient(180deg,var(--panel),rgba(13,29,51,.72));box-shadow:0 18px 45px rgba(0,0,0,.28)}
+    .card h2,.card h3{margin-top:0}.metric{font-size:2rem;font-weight:800;color:var(--ok)} code{color:var(--ok)} ul{padding-left:1.2rem}.terminal{display:grid;grid-template-columns:120px 1fr;gap:.8rem;align-items:center}.device{height:210px;border:8px solid #020812;border-radius:24px;background:var(--panel2);padding:1rem;box-shadow:inset 0 0 0 1px rgba(124,247,255,.4)}.scan{height:38px;border-radius:8px;background:linear-gradient(90deg,transparent,var(--ok),transparent);animation:pulse 1.8s infinite}.screen-line{height:10px;background:#26577d;border-radius:20px;margin:.7rem 0}.cta{display:inline-block;margin-top:.6rem;color:#05101d;background:var(--ok);padding:.7rem 1rem;border-radius:12px;text-decoration:none;font-weight:700}@keyframes pulse{50%{opacity:.35}}
   </style>
 </head>
 <body>
-  <h1>ProB2B Jarvis Visual Ops</h1>
-  <div class="card">Durum: <code>online</code></div>
-  <div class="card">Telemetri: <code>/telemetry</code></div>
-  <script>fetch('/health').then(r=>r.json()).then(console.log)</script>
+  <header>
+    <div>
+      <span class="badge">online · otomotiv MVP</span>
+      <h1>ProB2B Otomotiv Yedek Parça Ekosistemi</h1>
+      <p>B2B katalog, OEM/araç uyumluluğu, depo stoku, sipariş akışı ve barkodlu el terminali görev kuyruğu tek platformda.</p>
+    </div>
+    <span class="badge">API: <code>/automotive/overview</code></span>
+  </header>
+
+  <section class="grid" id="metrics">
+    <div class="card"><h3>Parça kataloğu</h3><div class="metric" data-count="parts">-</div><p>SKU, OEM ve araç uyumluluk kayıtları.</p></div>
+    <div class="card"><h3>Siparişler</h3><div class="metric" data-count="orders">-</div><p>B2B portal, telefon, pazaryeri ve el terminali.</p></div>
+    <div class="card"><h3>Terminal görevleri</h3><div class="metric" data-count="terminal_tasks">-</div><p>Sayım, mal kabul, toplama, transfer, teslimat.</p></div>
+  </section>
+
+  <section class="grid" style="margin-top:1rem">
+    <div class="card">
+      <h2>Ekosistem Modülleri</h2>
+      <ul id="modules"><li>Yükleniyor...</li></ul>
+      <a class="cta" href="/docs">Swagger API'yi aç</a>
+    </div>
+    <div class="card terminal">
+      <div class="device" aria-label="El terminali görseli">
+        <div class="scan"></div><div class="screen-line"></div><div class="screen-line"></div><div class="screen-line"></div><div class="screen-line" style="width:65%"></div>
+      </div>
+      <div>
+        <h2>El Terminali Hazır</h2>
+        <p id="terminal-copy">Android barkod okuyuculu terminal veya kamera destekli PWA ile depo görevleri yönetilir.</p>
+        <p><code>GET /automotive/terminal/tasks?terminal_id=HT-01</code></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    fetch('/automotive/overview')
+      .then(r=>r.json())
+      .then(data=>{
+        Object.entries(data.counts).forEach(([key,value])=>{
+          const el=document.querySelector(`[data-count="${key}"]`); if(el) el.textContent=value;
+        });
+        document.getElementById('modules').innerHTML=data.modules.map(item=>`<li>${item}</li>`).join('');
+        document.getElementById('terminal-copy').textContent=data.handheld_terminal.recommended_device_profile;
+      })
+      .catch(()=>fetch('/health').then(r=>r.json()).then(console.log));
+  </script>
 </body>
 </html>
