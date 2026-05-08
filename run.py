@@ -13,7 +13,7 @@ def spawn(cmd: list[str]) -> subprocess.Popen:
 def main() -> None:
     procs = [
         spawn([sys.executable, "core/main.py"]),
-        spawn([sys.executable, "api/server.py"]),
+        spawn([sys.executable, "-m", "api.server"]),
     ]
     print("Jarvis launcher started. Ctrl+C to stop all services.")
     try:

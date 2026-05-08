@@ -1,0 +1,24 @@
+{
+  "adapters": ["LOGO", "SAP", "NETSIS", "MIKRO", "CUSTOM_REST", "CUSTOM_SOAP"],
+  "product": {
+    "STOK_KODU_01": "sku",
+    "STOK_ADI": "name",
+    "MARKA": "brand",
+    "KDV_ORANI": "vat_rate",
+    "BIRIM_1": "unit"
+  },
+  "customer": {
+    "CARI_KOD": "customer_id",
+    "CARI_UNVAN": "name",
+    "VERGI_DAIRESI": "tax_office",
+    "VERGI_NO": "tax_number",
+    "MUHASEBE_KODU": "gl_code"
+  },
+  "order": {
+    "FIS_NO": "order_id",
+    "CARI_KOD": "customer_id",
+    "SUBE_KOD": "branch_id",
+    "ODEME_TIPI": "payment_method",
+    "GENEL_TOPLAM": "totals.grand_total"
+  }
+}

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prob2b-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: prob2b-api
+  template:
+    metadata:
+      labels:
+        app: prob2b-api
+    spec:
+      containers:
+        - name: api
+          image: registry.example.com/prob2b/api:2026.05
+          command: ["python", "-m", "api.server"]
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PROB2B_MODE
+              value: saas
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prob2b-api
+spec:
+  selector:
+    app: prob2b-api
+  ports:
+    - port: 80
+      targetPort: 8000

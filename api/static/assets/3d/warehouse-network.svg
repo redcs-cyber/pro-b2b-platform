@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" role="img" aria-labelledby="title desc">
+  <title id="title">3D Depo Ağı</title><desc id="desc">Merkez depo, şubeler, kargo ve stok akışını gösteren izometrik ağ.</desc>
+  <defs><linearGradient id="roof" x1="0" x2="1"><stop stop-color="#7cf7ff"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs>
+  <rect width="900" height="540" fill="#07111f"/><g stroke="#1e8fff" opacity=".25"><path d="M120 410h660M180 350h540M240 290h420"/></g>
+  <g font-family="Inter,Arial" font-weight="800" text-anchor="middle">
+    <g transform="translate(330 160)"><polygon points="0,90 140,10 280,90 140,170" fill="url(#roof)"/><polygon points="0,90 140,170 140,290 0,210" fill="#0b2745"/><polygon points="280,90 140,170 140,290 280,210" fill="#123761"/><text x="140" y="105" fill="#04111f">MERKEZ</text></g>
+    <g transform="translate(95 345) scale(.65)"><polygon points="0,70 110,10 220,70 110,130" fill="#9bffb1"/><polygon points="0,70 110,130 110,220 0,160" fill="#0f5132"/><polygon points="220,70 110,130 110,220 220,160" fill="#164f38"/><text x="110" y="82" fill="#032112">ANKARA</text></g>
+    <g transform="translate(650 350) scale(.65)"><polygon points="0,70 110,10 220,70 110,130" fill="#c2a2ff"/><polygon points="0,70 110,130 110,220 0,160" fill="#31215f"/><polygon points="220,70 110,130 110,220 220,160" fill="#25184d"/><text x="110" y="82" fill="#12042f">İZMİR</text></g>
+  </g>
+  <g fill="none" stroke="#7cf7ff" stroke-width="6" stroke-linecap="round"><path d="M370 365 C280 410 245 420 190 425"/><path d="M535 365 C620 410 665 425 720 430"/><path d="M450 320v105"/></g>
+  <g fill="#ffd166"><rect x="422" y="420" width="56" height="36" rx="6"/><rect x="428" y="410" width="44" height="18" rx="5"/></g>
+</svg>

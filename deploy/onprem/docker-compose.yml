@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: deploy/Dockerfile
+    command: python -m api.server
+    environment:
+      PROB2B_MODE: onprem
+      DATABASE_URL: postgresql://prob2b:prob2b@postgres:5432/prob2b
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on: [postgres, redis]
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: prob2b
+      POSTGRES_PASSWORD: prob2b
+      POSTGRES_DB: prob2b
+    volumes:
+      - prob2b_pg:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+volumes:
+  prob2b_pg:

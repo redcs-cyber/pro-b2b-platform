@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prob2b.local/schemas/visual_asset_schema.json",
+  "title": "ProB2B 3D Visual Asset",
+  "type": "object",
+  "required": ["asset_id", "title", "path", "format", "use_cases"],
+  "properties": {
+    "asset_id": {"type": "string"},
+    "title": {"type": "string"},
+    "path": {"type": "string"},
+    "format": {"enum": ["svg", "png", "webp", "glb"]},
+    "use_cases": {"type": "array", "items": {"type": "string"}},
+    "alt_text": {"type": "string"}
+  }
+}

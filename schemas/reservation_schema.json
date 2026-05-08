@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prob2b.local/schemas/reservation_schema.json",
+  "title": "ProB2B Stock Reservation",
+  "type": "object",
+  "required": ["reservation_id", "order_id", "sku", "quantity", "warehouse_id", "expires_at"],
+  "properties": {
+    "reservation_id": {"type": "string", "pattern": "^RSV-[A-Z0-9]+$"},
+    "order_id": {"type": "string", "pattern": "^B2B-[A-Z0-9-]+$"},
+    "sku": {"type": "string"},
+    "quantity": {"type": "integer", "minimum": 1},
+    "warehouse_id": {"type": "string"},
+    "expires_at": {"type": "string", "format": "date-time"}
+  }
+}

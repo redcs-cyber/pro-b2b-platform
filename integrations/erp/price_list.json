@@ -1,0 +1,10 @@
+{
+  "currency": "TRY",
+  "valid_from": "2026-01-01T00:00:00Z",
+  "valid_to": "2026-12-31T23:59:59Z",
+  "rules": [
+    {"rule_id": "PR-CARI99-PRODX", "type": "customer_net", "customer_id": "CARI-99", "sku": "PROD-X", "net_price": 45.0},
+    {"rule_id": "PR-GOLD", "type": "tier_discount", "tier": "gold", "discount_rate": 0.08},
+    {"rule_id": "PR-VOLUME-100", "type": "volume_discount", "min_quantity": 100, "discount_rate": 0.10}
+  ]
+}

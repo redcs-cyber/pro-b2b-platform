@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prob2b.local/schemas/customer_schema.json",
+  "title": "ProB2B Customer Account",
+  "type": "object",
+  "required": ["customer_id", "name", "tier", "tax_office", "tax_number", "gl_code", "payment_term_days", "credit_limit", "balance"],
+  "properties": {
+    "customer_id": {"type": "string"},
+    "parent_customer_id": {"type": ["string", "null"]},
+    "name": {"type": "string"},
+    "tier": {"enum": ["platinum", "gold", "silver", "standard"]},
+    "tax_office": {"type": "string"},
+    "tax_number": {"type": "string"},
+    "gl_code": {"type": "string"},
+    "payment_term_days": {"type": "integer", "minimum": 0},
+    "credit_limit": {"type": "number", "minimum": 0},
+    "balance": {"type": "number"},
+    "allowed_roles": {"type": "array", "items": {"type": "string"}},
+    "kvkk_consent": {"type": "boolean"}
+  }
+}

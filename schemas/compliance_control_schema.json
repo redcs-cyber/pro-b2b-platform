@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prob2b.local/schemas/compliance_control_schema.json",
+  "title": "ProB2B Compliance Certification Track",
+  "type": "object",
+  "required": ["code", "name", "owner", "status", "mandatory_for_go_live", "evidence_files"],
+  "properties": {
+    "code": {"type": "string"},
+    "name": {"type": "string"},
+    "owner": {"type": "string"},
+    "status": {"enum": ["planned", "in_progress", "evidence_ready", "external_audit_required", "not_applicable"]},
+    "mandatory_for_go_live": {"type": "boolean"},
+    "evidence_files": {"type": "array", "items": {"type": "string"}},
+    "missing_actions": {"type": "array", "items": {"type": "string"}}
+  }
+}
