@@ -2,17 +2,67 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <title>ProB2B Jarvis Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ProB2B Otomotiv Yedek Parça Ekosistemi</title>
   <style>
-    body{font-family:Inter,Arial,sans-serif;background:#07111f;color:#e6f7ff;margin:2rem}
-    .card{border:1px solid #1e8fff;border-radius:12px;padding:1rem;margin-bottom:1rem;background:#0d1d33}
-    code{color:#7cf7ff}
+    :root{color-scheme:dark;--bg:#07111f;--panel:#0d1d33;--panel2:#102846;--line:#1e8fff;--text:#e6f7ff;--muted:#9fc0d1;--ok:#7cf7ff;--warn:#ffd166}
+    *{box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top left,#123761 0,#07111f 38%,#050b14 100%);color:var(--text);margin:0;padding:2rem}
+    header{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1.5rem}.badge{border:1px solid var(--line);border-radius:999px;padding:.45rem .8rem;background:rgba(30,143,255,.12);color:var(--ok)}
+    h1{margin:.2rem 0;font-size:clamp(1.8rem,4vw,3.5rem)} p{color:var(--muted);line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}.card{border:1px solid rgba(30,143,255,.55);border-radius:16px;padding:1rem;background:linear-gradient(180deg,var(--panel),rgba(13,29,51,.72));box-shadow:0 18px 45px rgba(0,0,0,.28)}
+    .card h2,.card h3{margin-top:0}.metric{font-size:2rem;font-weight:800;color:var(--ok)} code{color:var(--ok)} ul{padding-left:1.2rem}.terminal{display:grid;grid-template-columns:120px 1fr;gap:.8rem;align-items:center}.device{height:210px;border:8px solid #020812;border-radius:24px;background:var(--panel2);padding:1rem;box-shadow:inset 0 0 0 1px rgba(124,247,255,.4)}.scan{height:38px;border-radius:8px;background:linear-gradient(90deg,transparent,var(--ok),transparent);animation:pulse 1.8s infinite}.screen-line{height:10px;background:#26577d;border-radius:20px;margin:.7rem 0}.cta{display:inline-block;margin-top:.6rem;color:#05101d;background:var(--ok);padding:.7rem 1rem;border-radius:12px;text-decoration:none;font-weight:700}@keyframes pulse{50%{opacity:.35}}
   </style>
 </head>
 <body>
-  <h1>ProB2B Jarvis Visual Ops</h1>
-  <div class="card">Durum: <code>online</code></div>
-  <div class="card">Telemetri: <code>/telemetry</code></div>
-  <script>fetch('/health').then(r=>r.json()).then(console.log)</script>
+  <header>
+    <div>
+      <span class="badge">online · otomotiv MVP</span>
+      <h1>ProB2B Otomotiv Yedek Parça Ekosistemi</h1>
+      <p>ERP, CRM, PIM, finans, lojistik, fiyat motoru, bayi portalı ve el terminali dahil tailor-made B2B ekosistemi tek platformda.</p>
+    </div>
+    <span class="badge">API: <code>/b2b/platform/blueprint</code></span>
+  </header>
+
+  <section class="grid" id="metrics">
+    <div class="card"><h3>Cariler</h3><div class="metric" data-count="customers">-</div><p>Ana bayi, alt bayi, plasiyer ve yetki hiyerarşisi.</p></div>
+    <div class="card"><h3>Ürünler</h3><div class="metric" data-count="products">-</div><p>PIM, teknik özellik, belge ve medya kayıtları.</p></div>
+    <div class="card"><h3>Fiyat Kuralları</h3><div class="metric" data-count="price_rules">-</div><p>Cari net, bayi grubu, hacim ve kampanya motoru.</p></div>
+  </section>
+
+  <section class="grid" style="margin-top:1rem">
+    <div class="card">
+      <h2>Ekosistem Modülleri</h2>
+      <ul id="modules"><li>Yükleniyor...</li></ul>
+      <a class="cta" href="/docs">Swagger API'yi aç</a>
+    </div>
+    <div class="card terminal">
+      <div class="device" aria-label="El terminali görseli">
+        <div class="scan"></div><div class="screen-line"></div><div class="screen-line"></div><div class="screen-line"></div><div class="screen-line" style="width:65%"></div>
+      </div>
+      <div>
+        <h2>El Terminali Hazır</h2>
+        <p id="terminal-copy">Android barkod okuyuculu terminal veya kamera destekli PWA ile depo görevleri yönetilir.</p>
+        <p><code>GET /automotive/terminal/tasks?terminal_id=HT-01</code></p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="grid" style="margin-top:1rem">
+    <div class="card"><h2>3D Ekosistem</h2><img src="/static/assets/3d/b2b-ecosystem.svg" alt="3D B2B ekosistem haritası" style="width:100%;border-radius:12px" /></div>
+    <div class="card"><h2>3D Depo Ağı</h2><img src="/static/assets/3d/warehouse-network.svg" alt="3D depo ağı" style="width:100%;border-radius:12px" /></div>
+  </section>
+
+  <script>
+    fetch('/b2b/platform/blueprint')
+      .then(r=>r.json())
+      .then(data=>{
+        Object.entries(data.counts).forEach(([key,value])=>{
+          const el=document.querySelector(`[data-count="${key}"]`); if(el) el.textContent=value;
+        });
+        document.getElementById('modules').innerHTML=data.layers.map(item=>`<li>${item}</li>`).join('');
+        document.getElementById('terminal-copy').textContent='SaaS Kubernetes veya on-prem Docker/Nginx ile; barkodlu el terminali, ERP job kuyruğu ve audit trail birlikte çalışır.';
+      })
+      .catch(()=>fetch('/health').then(r=>r.json()).then(console.log));
+  </script>
 </body>
 </html>

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prob2b.local/schemas/order_schema.json",
+  "title": "ProB2B Enterprise Order",
+  "type": "object",
+  "required": ["order_id", "customer_id", "branch_id", "order_date", "items", "payment_method", "shipping_address_id"],
+  "properties": {
+    "order_id": {"type": "string", "pattern": "^B2B-[A-Z0-9-]+$"},
+    "customer_id": {"type": "string", "examples": ["CARI-99"]},
+    "branch_id": {"type": "string", "examples": ["ANKARA-SUBE"]},
+    "order_date": {"type": "string", "format": "date-time"},
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["sku", "quantity", "unit_price", "discount_rate", "vat_rate"],
+        "properties": {
+          "sku": {"type": "string"},
+          "quantity": {"type": "integer", "minimum": 1},
+          "unit_price": {"type": "number", "minimum": 0},
+          "discount_rate": {"type": "number", "minimum": 0, "maximum": 1},
+          "vat_rate": {"type": "number", "minimum": 0, "maximum": 1},
+          "warehouse_id": {"type": "string"},
+          "reservation_id": {"type": "string"}
+        }
+      }
+    },
+    "payment_method": {"enum": ["open_account", "credit_card", "bank_transfer", "check_note", "virtual_pos"]},
+    "shipping_address_id": {"type": "string"},
+    "notes": {"type": "string"},
+    "approval_status": {"enum": ["auto_approved", "waiting_manager", "waiting_finance", "rejected"]},
+    "totals": {
+      "type": "object",
+      "properties": {
+        "subtotal": {"type": "number"},
+        "discount_total": {"type": "number"},
+        "vat_total": {"type": "number"},
+        "grand_total": {"type": "number"}
+      }
+    }
+  }
+}

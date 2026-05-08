@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prob2b.local/schemas/llm_task_schema.json",
+  "title": "ProB2B LLM Task Plan Request",
+  "type": "object",
+  "required": ["task_type", "prompt"],
+  "properties": {
+    "task_type": {"enum": ["support_reply", "quote_summary", "compliance_gap", "product_copy", "sql_report", "integration_debug"]},
+    "prompt": {"type": "string", "minLength": 3},
+    "language": {"enum": ["tr", "en"], "default": "tr"},
+    "context": {"type": "object"},
+    "require_human_approval": {"type": "boolean", "default": true}
+  }
+}

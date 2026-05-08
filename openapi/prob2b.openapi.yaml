@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: ProB2B Enterprise API
+  version: 2026.05.0
+  description: Tailor-made B2B, otomotiv, ERP, WMS, finans, lojistik ve analitik sözleşmesi.
+servers:
+  - url: http://127.0.0.1:8000
+paths:
+  /b2b/platform/blueprint:
+    get:
+      summary: Platform katmanlarını ve kritik dosya haritasını döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/quote:
+    post:
+      summary: Dinamik fiyat, KDV, limit ve onay workflow teklifini hesaplar.
+      responses:
+        '200': {description: OK}
+  /b2b/orders:
+    post:
+      summary: Sipariş oluşturur, stok rezerve eder, ERP job ve audit üretir.
+      responses:
+        '200': {description: OK}
+  /b2b/enterprise/features:
+    get:
+      summary: Dev ekosistem modül kataloğu ve otomasyon kurallarını döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/quick-order/parse:
+    post:
+      summary: CSV hızlı sipariş içeriğini satır ve hata listesine dönüştürür.
+      responses:
+        '200': {description: OK}
+  /b2b/shipments:
+    post:
+      summary: Kargo kaydı, takip numarası ve bildirim kuyruğu oluşturur.
+      responses:
+        '200': {description: OK}
+  /b2b/returns:
+    post:
+      summary: RMA/iade talebi ve bildirim kuyruğu oluşturur.
+      responses:
+        '200': {description: OK}
+  /b2b/analytics/snapshot:
+    get:
+      summary: GMV, sipariş, rezervasyon, sevkiyat, iade ve bildirim KPI özetini döndürür.
+      responses:
+        '200': {description: OK}
+
+  /b2b/compliance/readiness:
+    get:
+      summary: Sertifika, müfredat ve go-live readiness özetini döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/compliance/certifications:
+    get:
+      summary: KVKK, ISO, PCI, ASVS, e-belge ve iş sürekliliği sertifika matrisini döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/compliance/curriculum:
+    get:
+      summary: Eğitim/müfredat modüllerini depo kanıtlarıyla listeler.
+      responses:
+        '200': {description: OK}
+
+  /b2b/llm/capabilities:
+    get:
+      summary: LLM sağlayıcı rotaları, görev tipleri ve guardrail listesini döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/llm/tasks/plan:
+    post:
+      summary: Dış modele çağrı yapmadan güvenli LLM görev planı üretir.
+      responses:
+        '200': {description: OK}

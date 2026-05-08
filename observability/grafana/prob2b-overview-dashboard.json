@@ -1,0 +1,11 @@
+{
+  "title": "ProB2B Enterprise Overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "panels": [
+    {"type": "stat", "title": "Orders", "targets": [{"expr": "prob2b_orders_total"}]},
+    {"type": "stat", "title": "GMV", "targets": [{"expr": "prob2b_gmv_total"}]},
+    {"type": "stat", "title": "ERP Queue", "targets": [{"expr": "prob2b_integration_jobs_queued"}]},
+    {"type": "stat", "title": "Finance Approvals", "targets": [{"expr": "prob2b_finance_approvals_open"}]}
+  ]
+}
