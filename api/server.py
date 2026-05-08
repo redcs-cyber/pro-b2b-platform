@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 from api.telemetry_service import TelemetryStore
 from api.b2b_ecosystem import B2BEcosystemStore, B2BOrderCreate
+from api.compliance import ComplianceProgram
 from api.enterprise_suite import ApprovalRequest, EnterpriseSuite, ReturnCreate, ShipmentCreate
 from api.quick_order import parse_quick_order_csv
 from api.automotive import (
@@ -23,6 +24,7 @@ store = TelemetryStore()
 automotive_store = AutomotiveStore()
 b2b_store = B2BEcosystemStore()
 enterprise_suite = EnterpriseSuite(b2b_store)
+compliance_program = ComplianceProgram()
 STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
@@ -124,6 +126,26 @@ def b2b_search_index() -> list[dict]:
 @app.get("/b2b/analytics/snapshot")
 def b2b_analytics_snapshot() -> dict:
     return enterprise_suite.analytics_snapshot()
+
+
+@app.get("/b2b/compliance/readiness")
+def b2b_compliance_readiness() -> dict:
+    return compliance_program.readiness_overview()
+
+
+@app.get("/b2b/compliance/certifications")
+def b2b_compliance_certifications() -> list[dict]:
+    return compliance_program.certification_matrix()
+
+
+@app.get("/b2b/compliance/curriculum")
+def b2b_compliance_curriculum() -> list[dict]:
+    return compliance_program.curriculum_map()
+
+
+@app.get("/b2b/compliance/missing-actions")
+def b2b_compliance_missing_actions() -> list[dict]:
+    return compliance_program.missing_go_live_actions()
 
 
 @app.get("/automotive/overview")

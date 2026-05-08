@@ -184,6 +184,7 @@ class B2BEcosystemStore:
                 "BI dashboard, raporlama, anomaly/fraud monitoring",
                 "SaaS Kubernetes + on-prem Docker/Nginx dağıtım seçenekleri",
                 "Kargo, iade, bildirim, arama indeksi ve BI KPI katmanı",
+                "Müfredat, sertifika ve go-live compliance kontrol katmanı",
             ],
             "data_files": {
                 "order_schema": "schemas/order_schema.json",
@@ -208,6 +209,8 @@ class B2BEcosystemStore:
                 "prometheus": "observability/prometheus/prometheus.yml",
                 "grafana": "observability/grafana/prob2b-overview-dashboard.json",
                 "cli": "cli/prob2b.py",
+                "compliance_schema": "schemas/compliance_control_schema.json",
+                "compliance_roadmap": "docs/compliance-certification-roadmap-tr.md",
             },
             "counts": {
                 "customers": len(self.customers),

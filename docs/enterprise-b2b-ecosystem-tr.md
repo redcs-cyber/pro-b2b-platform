@@ -16,6 +16,7 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 10. **BI / Observability:** Bayi performansı, stok turnover, satış hunisi, anomaly/fraud sinyalleri, log/metric/trace.
 11. **Dağıtım:** SaaS için Kubernetes; on-prem için Docker Compose + Nginx + backup scriptleri.
 12. **Enterprise Suite:** ACL policy, workflow karar motoru, ödeme planı, kargo, iade, bildirim, arama indeksi ve KPI snapshot.
+13. **Compliance / Müfredat:** KVKK, ISO 27001, OWASP ASVS, PCI DSS, e-belge, iş sürekliliği ve eğitim çıktısı readiness matrisi.
 
 ## Kritik Dosya Haritası
 
@@ -41,6 +42,9 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 | `observability/prometheus/prometheus.yml` | Prometheus scrape yapılandırması. |
 | `observability/grafana/prob2b-overview-dashboard.json` | Grafana dashboard taslağı. |
 | `cli/prob2b.py` | Blueprint, CSV teklif ve fixture export CLI aracı. |
+| `api/compliance.py` | Sertifika, go-live ve müfredat readiness domain katmanı. |
+| `docs/compliance-certification-roadmap-tr.md` | Sertifika/müfredat uygunluk ve eksik aksiyon matrisi. |
+| `schemas/compliance_control_schema.json` | Sertifika kontrol kaydı JSON schema sözleşmesi. |
 
 ## API Uçları
 
@@ -59,6 +63,10 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 | İade oluşturma | `POST` | `/b2b/returns` |
 | Arama indeksi | `GET` | `/b2b/search/index` |
 | KPI snapshot | `GET` | `/b2b/analytics/snapshot` |
+| Compliance readiness | `GET` | `/b2b/compliance/readiness` |
+| Sertifika matrisi | `GET` | `/b2b/compliance/certifications` |
+| Müfredat haritası | `GET` | `/b2b/compliance/curriculum` |
+| Eksik go-live aksiyonları | `GET` | `/b2b/compliance/missing-actions` |
 
 ## Örnek Teklif
 

@@ -46,3 +46,19 @@ paths:
       summary: GMV, sipariş, rezervasyon, sevkiyat, iade ve bildirim KPI özetini döndürür.
       responses:
         '200': {description: OK}
+
+  /b2b/compliance/readiness:
+    get:
+      summary: Sertifika, müfredat ve go-live readiness özetini döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/compliance/certifications:
+    get:
+      summary: KVKK, ISO, PCI, ASVS, e-belge ve iş sürekliliği sertifika matrisini döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/compliance/curriculum:
+    get:
+      summary: Eğitim/müfredat modüllerini depo kanıtlarıyla listeler.
+      responses:
+        '200': {description: OK}
