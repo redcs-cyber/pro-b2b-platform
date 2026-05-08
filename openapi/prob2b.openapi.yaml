@@ -62,3 +62,14 @@ paths:
       summary: Eğitim/müfredat modüllerini depo kanıtlarıyla listeler.
       responses:
         '200': {description: OK}
+
+  /b2b/llm/capabilities:
+    get:
+      summary: LLM sağlayıcı rotaları, görev tipleri ve guardrail listesini döndürür.
+      responses:
+        '200': {description: OK}
+  /b2b/llm/tasks/plan:
+    post:
+      summary: Dış modele çağrı yapmadan güvenli LLM görev planı üretir.
+      responses:
+        '200': {description: OK}

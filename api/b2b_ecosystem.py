@@ -185,6 +185,8 @@ class B2BEcosystemStore:
                 "SaaS Kubernetes + on-prem Docker/Nginx dağıtım seçenekleri",
                 "Kargo, iade, bildirim, arama indeksi ve BI KPI katmanı",
                 "Müfredat, sertifika ve go-live compliance kontrol katmanı",
+                "LLM destekli operasyon asistanı, teklif açıklama ve destek otomasyonu",
+                "3D ürün/terminal/depo görsel varlıkları ve görsel şema kataloğu",
             ],
             "data_files": {
                 "order_schema": "schemas/order_schema.json",
@@ -211,6 +213,10 @@ class B2BEcosystemStore:
                 "cli": "cli/prob2b.py",
                 "compliance_schema": "schemas/compliance_control_schema.json",
                 "compliance_roadmap": "docs/compliance-certification-roadmap-tr.md",
+                "llm_task_schema": "schemas/llm_task_schema.json",
+                "visual_asset_schema": "schemas/visual_asset_schema.json",
+                "reservation_schema": "schemas/reservation_schema.json",
+                "visual_catalog": "docs/visual-assets-tr.md",
             },
             "counts": {
                 "customers": len(self.customers),
@@ -229,12 +235,16 @@ class B2BEcosystemStore:
         return [asdict(customer) for customer in customers]
 
     def calculate_quote(self, request: B2BOrderCreate) -> dict[str, Any]:
+        if not request.lines:
+            raise ValueError("Sipariş satırı boş olamaz")
         customer = self._require_customer(request.customer_id)
         quote_lines = []
         subtotal = Decimal("0")
         vat_total = Decimal("0")
         discount_total = Decimal("0")
         for line in request.lines:
+            if line.quantity <= 0:
+                raise ValueError(f"Geçersiz miktar: {line.sku}")
             product = self._require_product(line.sku)
             unit_list_price = money(product.list_price)
             best_price, applied_rules = self._best_unit_price(customer, product, line.quantity)
@@ -276,6 +286,7 @@ class B2BEcosystemStore:
     def create_order(self, request: B2BOrderCreate, actor_id: str = "system", ip_address: str = "127.0.0.1") -> dict[str, Any]:
         quote = self.calculate_quote(request)
         order_id = f"B2B-{uuid4().hex[:6].upper()}"
+        reservation_plan = self._plan_reservations(order_id, request.lines, request.branch_id)
         order = {
             "order_id": order_id,
             "customer_id": request.customer_id,
@@ -295,31 +306,48 @@ class B2BEcosystemStore:
             "approval_status": quote["approval_status"],
             "workflow": quote["workflow"],
         }
+        self._commit_reservations(reservation_plan)
         self.orders[order_id] = order
-        for line in request.lines:
-            self.reserve_stock(order_id, line.sku, line.quantity, request.branch_id)
         self.integration_jobs.append(self._erp_order_job(order))
         self.audit(actor_id, "order.create", "order", order_id, ip_address, {"grand_total": quote["grand_total"]})
         return order
 
     def reserve_stock(self, order_id: str, sku: str, quantity: int, branch_id: str) -> dict[str, Any]:
-        available = self.inventory.get(sku, {}).get(branch_id, 0)
-        if available < quantity:
-            branch_id = "MERKEZ"
-            available = self.inventory.get(sku, {}).get(branch_id, 0)
-        if available < quantity:
-            raise ValueError(f"Yetersiz stok: {sku}")
-        self.inventory[sku][branch_id] -= quantity
-        reservation = StockReservation(
-            reservation_id=f"RSV-{uuid4().hex[:8].upper()}",
-            order_id=order_id,
-            sku=sku,
-            quantity=quantity,
-            warehouse_id=branch_id,
-            expires_at=(datetime.now(timezone.utc) + timedelta(minutes=30)).isoformat(),
-        )
-        self.reservations[reservation.reservation_id] = reservation
-        return asdict(reservation)
+        plan = self._plan_reservations(order_id, [B2BOrderLine(sku=sku, quantity=quantity)], branch_id)
+        self._commit_reservations(plan)
+        return asdict(plan[0])
+
+    def _plan_reservations(self, order_id: str, lines: list[B2BOrderLine], branch_id: str) -> list[StockReservation]:
+        scratch_inventory = {sku: locations.copy() for sku, locations in self.inventory.items()}
+        plan: list[StockReservation] = []
+        for line in lines:
+            self._require_product(line.sku)
+            if line.quantity <= 0:
+                raise ValueError(f"Geçersiz miktar: {line.sku}")
+            selected_warehouse = branch_id
+            available = scratch_inventory.get(line.sku, {}).get(selected_warehouse, 0)
+            if available < line.quantity:
+                selected_warehouse = "MERKEZ"
+                available = scratch_inventory.get(line.sku, {}).get(selected_warehouse, 0)
+            if available < line.quantity:
+                raise ValueError(f"Yetersiz stok: {line.sku}")
+            scratch_inventory[line.sku][selected_warehouse] -= line.quantity
+            plan.append(
+                StockReservation(
+                    reservation_id=f"RSV-{uuid4().hex[:8].upper()}",
+                    order_id=order_id,
+                    sku=line.sku,
+                    quantity=line.quantity,
+                    warehouse_id=selected_warehouse,
+                    expires_at=(datetime.now(timezone.utc) + timedelta(minutes=30)).isoformat(),
+                )
+            )
+        return plan
+
+    def _commit_reservations(self, reservation_plan: list[StockReservation]) -> None:
+        for reservation in reservation_plan:
+            self.inventory[reservation.sku][reservation.warehouse_id] -= reservation.quantity
+            self.reservations[reservation.reservation_id] = reservation
 
     def workflow_for(self, approval_status: ApprovalStatus) -> list[dict[str, str]]:
         if approval_status == "auto_approved":

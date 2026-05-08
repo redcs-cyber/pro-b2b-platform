@@ -17,6 +17,7 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 11. **Dağıtım:** SaaS için Kubernetes; on-prem için Docker Compose + Nginx + backup scriptleri.
 12. **Enterprise Suite:** ACL policy, workflow karar motoru, ödeme planı, kargo, iade, bildirim, arama indeksi ve KPI snapshot.
 13. **Compliance / Müfredat:** KVKK, ISO 27001, OWASP ASVS, PCI DSS, e-belge, iş sürekliliği ve eğitim çıktısı readiness matrisi.
+14. **LLM ve 3D Demo Katmanı:** Offline-safe LLM görev planları, sağlayıcı routing, 3D SVG ekosistem/terminal/depo görselleri.
 
 ## Kritik Dosya Haritası
 
@@ -45,6 +46,12 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 | `api/compliance.py` | Sertifika, go-live ve müfredat readiness domain katmanı. |
 | `docs/compliance-certification-roadmap-tr.md` | Sertifika/müfredat uygunluk ve eksik aksiyon matrisi. |
 | `schemas/compliance_control_schema.json` | Sertifika kontrol kaydı JSON schema sözleşmesi. |
+| `api/llm_support.py` | LLM provider routing, prompt/guardrail ve görev planlama katmanı. |
+| `docs/llm-support-tr.md` | LLM destek kullanım ve güvenlik rehberi. |
+| `docs/visual-assets-tr.md` | 3D SVG görsel varlık kataloğu. |
+| `schemas/llm_task_schema.json` | LLM görev planı request sözleşmesi. |
+| `schemas/reservation_schema.json` | Stok rezervasyon sözleşmesi. |
+| `schemas/visual_asset_schema.json` | Görsel varlık metadata sözleşmesi. |
 
 ## API Uçları
 
@@ -67,6 +74,8 @@ Bu doküman, sistemi yalnızca otomotiv yedek parça MVP'si olmaktan çıkarıp 
 | Sertifika matrisi | `GET` | `/b2b/compliance/certifications` |
 | Müfredat haritası | `GET` | `/b2b/compliance/curriculum` |
 | Eksik go-live aksiyonları | `GET` | `/b2b/compliance/missing-actions` |
+| LLM kabiliyetleri | `GET` | `/b2b/llm/capabilities` |
+| LLM görev planı | `POST` | `/b2b/llm/tasks/plan` |
 
 ## Örnek Teklif
 

@@ -61,3 +61,31 @@ def test_credit_limit_routes_large_open_account_order_to_finance() -> None:
 
     assert quote["approval_status"] == "waiting_finance"
     assert quote["workflow"][0]["owner"] == "finance-manager"
+
+
+def test_create_order_is_atomic_when_later_line_has_insufficient_stock() -> None:
+    store = B2BEcosystemStore()
+    original_branch_stock = store.inventory["PROD-X"]["ANKARA-SUBE"]
+    original_center_stock = store.inventory["FLT-YAG-010"]["MERKEZ"]
+
+    try:
+        store.create_order(
+            B2BOrderCreate(
+                customer_id="CARI-99",
+                branch_id="ANKARA-SUBE",
+                lines=[
+                    B2BOrderLine(sku="PROD-X", quantity=100),
+                    B2BOrderLine(sku="FLT-YAG-010", quantity=999_999),
+                ],
+            )
+        )
+    except ValueError as exc:
+        assert "Yetersiz stok" in str(exc)
+    else:
+        raise AssertionError("Yetersiz stok için ValueError bekleniyordu")
+
+    assert store.inventory["PROD-X"]["ANKARA-SUBE"] == original_branch_stock
+    assert store.inventory["FLT-YAG-010"]["MERKEZ"] == original_center_stock
+    assert store.orders == {}
+    assert store.reservations == {}
+    assert store.integration_jobs == []

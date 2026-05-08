@@ -9,6 +9,7 @@ from api.telemetry_service import TelemetryStore
 from api.b2b_ecosystem import B2BEcosystemStore, B2BOrderCreate
 from api.compliance import ComplianceProgram
 from api.enterprise_suite import ApprovalRequest, EnterpriseSuite, ReturnCreate, ShipmentCreate
+from api.llm_support import LLMOrchestrator, LLMTaskRequest
 from api.quick_order import parse_quick_order_csv
 from api.automotive import (
     AutomotiveStore,
@@ -25,6 +26,7 @@ automotive_store = AutomotiveStore()
 b2b_store = B2BEcosystemStore()
 enterprise_suite = EnterpriseSuite(b2b_store)
 compliance_program = ComplianceProgram()
+llm_orchestrator = LLMOrchestrator()
 STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
@@ -126,6 +128,16 @@ def b2b_search_index() -> list[dict]:
 @app.get("/b2b/analytics/snapshot")
 def b2b_analytics_snapshot() -> dict:
     return enterprise_suite.analytics_snapshot()
+
+
+@app.get("/b2b/llm/capabilities")
+def b2b_llm_capabilities() -> dict:
+    return llm_orchestrator.capabilities()
+
+
+@app.post("/b2b/llm/tasks/plan")
+def b2b_llm_plan_task(request: LLMTaskRequest) -> dict:
+    return llm_orchestrator.plan_task(request)
 
 
 @app.get("/b2b/compliance/readiness")

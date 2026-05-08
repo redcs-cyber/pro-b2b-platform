@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 540" role="img" aria-labelledby="title desc">
+  <title id="title">3D El Terminali</title><desc id="desc">Barkod tarayıcılı depo el terminali görseli.</desc>
+  <defs><linearGradient id="body" x1="0" x2="1"><stop stop-color="#0d1d33"/><stop offset="1" stop-color="#07111f"/></linearGradient><linearGradient id="scan" x1="0" x2="1"><stop stop-color="#7cf7ff"/><stop offset="1" stop-color="#1e8fff"/></linearGradient></defs>
+  <rect width="540" height="540" fill="#07111f"/><ellipse cx="286" cy="450" rx="165" ry="34" fill="#000" opacity=".35"/>
+  <g transform="translate(155 55) skewY(-8)"><rect x="0" y="0" width="230" height="410" rx="32" fill="url(#body)" stroke="#1e8fff" stroke-width="8"/><rect x="35" y="48" width="160" height="210" rx="14" fill="#102846"/><rect x="52" y="72" width="126" height="24" rx="8" fill="url(#scan)"/><rect x="52" y="122" width="126" height="12" rx="6" fill="#26577d"/><rect x="52" y="152" width="92" height="12" rx="6" fill="#26577d"/><rect x="52" y="182" width="116" height="12" rx="6" fill="#26577d"/><g fill="#7cf7ff"><circle cx="70" cy="310" r="18"/><circle cx="115" cy="310" r="18"/><circle cx="160" cy="310" r="18"/><circle cx="70" cy="358" r="18"/><circle cx="115" cy="358" r="18"/><circle cx="160" cy="358" r="18"/></g></g>
+  <path d="M85 145h120" stroke="#7cf7ff" stroke-width="8" stroke-linecap="round" opacity=".75"/><path d="M70 175h145" stroke="#7cf7ff" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+</svg>
